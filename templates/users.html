@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Usuários</title>
+    <style>
+        /* Estilos CSS para a lista de usuários e tabela */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f5f5f5;
+        }
+        
+        button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        /* Estilos CSS para o pop-up */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            display: none; /* Oculta por padrão */
+        }
+        
+        .popup-input {
+            margin-bottom: 10px;
+        }
+        
+        .popup-button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Usuários</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>
+                    <button onclick="updateUser({{ user.id }}, '{{ user.name }}')">Atualizar</button>
+                    <button onclick="deleteUser({{ user.id }})">Deletar</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+
+    <!-- Botão para criar usuário -->
+    <button onclick="showCreateUserPopup()">Criar Usuário</button>
+
+    <!-- Pop-up para criar usuário -->
+    <div id="createUserPopup" class="popup">
+        <h2>Criar Novo Usuário</h2>
+        <input id="createUserIdInput" class="popup-input" type="text" placeholder="ID">
+        <input id="createUserNameInput" class="popup-input" type="text" placeholder="Nome">
+        <button onclick="createUser()">Criar</button>
+    </div>
+
+    <!-- Pop-up para atualizar usuário -->
+    <div id="updateUserPopup" class="popup">
+        <h2>Atualizar Usuário</h2>
+        <input id="updateUserNameInput" class="popup-input" type="text" placeholder="Novo Nome">
+<!--        <button onclick="updateUser()">Atualizar</button>-->
+    </div>
+
+    <script>
+        // Funções para realizar as requisições
+        // ...
+
+        function showCreateUserPopup() {
+            document.getElementById("createUserPopup").style.display = "block";
+        }
+
+        function createUser() {
+            var userId = document.getElementById("createUserIdInput").value;
+            var userName = document.getElementById("createUserNameInput").value;
+            var data = {"id": parseInt(userId), "name": userName};
+            fetch('/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                location.reload();  // Recarrega a página após a criação do usuário
+            })
+            .catch(error => console.log(error));
+        }
+
+        function updateUser(userId, currentName) {
+            document.getElementById("updateUserPopup").style.display = "block";
+            document.getElementById("updateUserNameInput").value = currentName;
+            document.getElementById("updateUserNameInput").focus();
+            document.getElementById("updateUserPopup").onkeydown = function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    submitUpdateUser(userId);
+                }
+            };
+        }
+
+        function submitUpdateUser(userId) {
+            var newName = document.getElementById("updateUserNameInput").value;
+            var data = {"name": newName};
+            fetch(`/users/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                location.reload();  // Recarrega a página após atualizar o usuário
+            })
+            .catch(error => console.log(error));
+        }
+
+        function deleteUser(userId) {
+            fetch(`/users/${userId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                location.reload();  // Recarrega a página após deletar o usuário
+            })
+            .catch(error => console.log(error));
+        }
+    </script>
+</body>
+</html>
