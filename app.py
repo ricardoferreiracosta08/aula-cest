@@ -12,12 +12,21 @@ users = [
 # Rota da página inicial
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html', users=users)
+    return render_template('index.html')
+
+# Endpoint para listar todos os usuários
+@app.route('/users2', methods=['GET'])
+def get_users2():
+    return jsonify(users)
 
 # Endpoint para listar todos os usuários
 @app.route('/users', methods=['GET'])
 def get_users():
-    return jsonify(users)
+    return render_template('users.html', users=users)
+
+#@app.route('/users', methods=['GET'])
+#def get_users():
+#    return jsonify(users)
 
 # Endpoint para criar um novo usuário
 @app.route('/users', methods=['POST'])
