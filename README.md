@@ -1,13 +1,14 @@
-# Lista de Usuários
+# Lista de Usuários (API REST)
 
-Este é um projeto simples em Flask que implementa uma lista de usuários com recursos CRUD (Create, Read, Update, Delete). Permite adicionar, visualizar, atualizar e excluir usuários.
+Este é um projeto simples em Flask que implementa uma API REST para uma lista de usuários com recursos CRUD (Create, Read, Update, Delete). Permite adicionar, visualizar, atualizar e excluir usuários utilizando os padrões REST.
 
 ## Funcionalidades
 
 - Exibe uma tabela com a lista de usuários, incluindo seus IDs e nomes.
-- Permite adicionar um novo usuário fornecendo um ID e um nome.
-- Permite atualizar o nome de um usuário existente.
-- Permite excluir um usuário da lista.
+- Permite adicionar um novo usuário fornecendo um ID e um nome através de uma requisição POST.
+- Permite obter informações de um usuário específico através de uma requisição GET.
+- Permite atualizar o nome de um usuário existente através de uma requisição PUT.
+- Permite excluir um usuário da lista através de uma requisição DELETE.
 
 ## Tecnologias Utilizadas
 
@@ -21,7 +22,7 @@ Este é um projeto simples em Flask que implementa uma lista de usuários com re
 2. Clone este repositório para o seu ambiente local.
 3. Instale as dependências do projeto executando o seguinte comando:
 
-pip install -r requirements.txt
+pip3 install flask
 
 4. Execute o seguinte comando para iniciar o servidor Flask:
 
